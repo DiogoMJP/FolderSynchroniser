@@ -22,6 +22,8 @@ class File():
                 self.copy = True
             else:
                 self.dest_list += [(path, time, path_origin)]
+                if time < self.origin[1]:
+                    self.copy = True
     
     def display(self, tree, parent):
         item = (datetime.fromtimestamp(self.origin[1]), self.origin[2])

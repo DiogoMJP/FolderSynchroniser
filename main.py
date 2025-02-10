@@ -20,6 +20,7 @@ class App():
         filemenu = tk.Menu(menu)
         menu.add_cascade(label='File', menu=filemenu)
         filemenu.add_command(label='Open Directory', command=self.select_file)
+        filemenu.add_command(label='Clear Selection', command=self.clear_selection)
         filemenu.add_separator()
         filemenu.add_command(label='Exit', command=self.root.quit)
 
@@ -37,32 +38,41 @@ class App():
         selected_file = filedialog.Directory().show()
         
         if selected_file != "":
-            for widget in self.main_frame.winfo_children():
-                widget.destroy()
-        
-        if self.opened_dirs == None:
-            self.opened_dirs = Directory.Directory(None)
-        self.opened_dirs.traverse_dirs(selected_file, selected_file)
+            if self.opened_dirs == None:
+                for widget in self.main_frame.winfo_children():
+                    widget.destroy()
+                self.opened_dirs = Directory.Directory(None)
+            self.opened_dirs.traverse_dirs(selected_file, selected_file)
 
-        self.tree = ttk.Treeview(columns=["Last Modified", "Last Modification Origin"])
-        vsb = ttk.Scrollbar(orient="vertical",
-            command=self.tree.yview)
-        hsb = ttk.Scrollbar(orient="horizontal",
-            command=self.tree.xview)
-        self.tree.configure(yscrollcommand=vsb.set,
-            xscrollcommand=hsb.set)
-        self.tree.grid(column=0, row=0, sticky='nsew', in_=self.main_frame)
-        vsb.grid(column=1, row=0, sticky='ns', in_=self.main_frame)
-        hsb.grid(column=0, row=1, sticky='ew', in_=self.main_frame)
-        self.main_frame.grid_columnconfigure(0, weight=1)
-        self.main_frame.grid_rowconfigure(0, weight=1)
-        self.tree.tag_configure('copy', background='light green')
+            self.tree = ttk.Treeview(self.main_frame, columns=["Last Modified", "Last Modification Origin"])
+            vsb = ttk.Scrollbar(orient="vertical",
+                command=self.tree.yview)
+            hsb = ttk.Scrollbar(orient="horizontal",
+                command=self.tree.xview)
+            self.tree.configure(yscrollcommand=vsb.set,
+                xscrollcommand=hsb.set)
+            self.tree.grid(column=0, row=0, sticky='nsew', in_=self.main_frame)
+            vsb.grid(column=1, row=0, sticky='ns', in_=self.main_frame)
+            hsb.grid(column=0, row=1, sticky='ew', in_=self.main_frame)
+            self.main_frame.grid_columnconfigure(0, weight=1)
+            self.main_frame.grid_rowconfigure(0, weight=1)
+            self.tree.tag_configure('copy', background='light green')
 
-        for col in ["Last Modified", "Last Modification Origin"]:
-            self.tree.heading(col, text=col.title())
-            self.tree.column(col, width=tkFont.Font().measure(col.title()))
+            for col in ["Last Modified", "Last Modification Origin"]:
+                self.tree.heading(col, text=col.title())
+                self.tree.column(col, width=tkFont.Font().measure(col.title()))
+            
+            self.opened_dirs.display(self.tree, '')
+
+
+    def clear_selection(self):
+        print("a")
+        self.opened_dirs = None
+        for widget in self.main_frame.winfo_children():
+            widget.destroy()
         
-        self.opened_dirs.display(self.tree, '')
+        tk.Button(self.main_frame, text="Select Directory", anchor="center", justify="center", command=self.select_file).place(relx=0.5, rely=0.5, anchor="center")
+
 
 
 if __name__ == "__main__":
