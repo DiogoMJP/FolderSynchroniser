@@ -37,9 +37,10 @@ class App():
         
         if selected_file != "":
             if self.opened_dirs == None:
-                for widget in self.main_frame.winfo_children():
-                    widget.destroy()
                 self.opened_dirs = Directory.Directory(None)
+                
+            for widget in self.main_frame.winfo_children():
+                widget.destroy()
             
             self.path_origins += [selected_file]
             
@@ -47,17 +48,7 @@ class App():
             self.opened_dirs.check_for_number_of_files(len(self.path_origins))
 
             self.tree = ttk.Treeview(self.main_frame, columns=["Last Modified", "Last Modification Origin"])
-            vsb = ttk.Scrollbar(orient="vertical",
-                command=self.tree.yview)
-            hsb = ttk.Scrollbar(orient="horizontal",
-                command=self.tree.xview)
-            self.tree.configure(yscrollcommand=vsb.set,
-                xscrollcommand=hsb.set)
-            self.tree.grid(column=0, row=0, sticky='nsew', in_=self.main_frame)
-            vsb.grid(column=1, row=0, sticky='ns', in_=self.main_frame)
-            hsb.grid(column=0, row=1, sticky='ew', in_=self.main_frame)
-            self.main_frame.grid_columnconfigure(0, weight=1)
-            self.main_frame.grid_rowconfigure(0, weight=1)
+            self.tree.pack(expand=True, fill="both", padx=5, pady=5)
             self.tree.tag_configure('copy', background='light green')
 
             for col in ["Last Modified", "Last Modification Origin"]:
@@ -72,17 +63,7 @@ class App():
             widget.destroy()
         
         self.tree = ttk.Treeview(self.main_frame, columns=["Last Modified", "Last Modification Origin"])
-        vsb = ttk.Scrollbar(orient="vertical",
-            command=self.tree.yview)
-        hsb = ttk.Scrollbar(orient="horizontal",
-            command=self.tree.xview)
-        self.tree.configure(yscrollcommand=vsb.set,
-            xscrollcommand=hsb.set)
-        self.tree.grid(column=0, row=0, sticky='nsew', in_=self.main_frame)
-        vsb.grid(column=1, row=0, sticky='ns', in_=self.main_frame)
-        hsb.grid(column=0, row=1, sticky='ew', in_=self.main_frame)
-        self.main_frame.grid_columnconfigure(0, weight=1)
-        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.tree.pack(expand=True, fill="both", padx=5, pady=5)
         self.tree.tag_configure('copy', background='light green')
 
         for col in ["Last Modified", "Last Modification Origin"]:
@@ -115,17 +96,7 @@ class App():
             widget.destroy()
         
         self.tree = ttk.Treeview(self.main_frame, columns=["Last Modified", "Last Modification Origin"])
-        vsb = ttk.Scrollbar(orient="vertical",
-            command=self.tree.yview)
-        hsb = ttk.Scrollbar(orient="horizontal",
-            command=self.tree.xview)
-        self.tree.configure(yscrollcommand=vsb.set,
-            xscrollcommand=hsb.set)
-        self.tree.grid(column=0, row=0, sticky='nsew', in_=self.main_frame)
-        vsb.grid(column=1, row=0, sticky='ns', in_=self.main_frame)
-        hsb.grid(column=0, row=1, sticky='ew', in_=self.main_frame)
-        self.main_frame.grid_columnconfigure(0, weight=1)
-        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.tree.pack(expand=True, fill="both", padx=5, pady=5)
         self.tree.tag_configure('copy', background='light green')
 
         for col in ["Last Modified", "Last Modification Origin"]:
