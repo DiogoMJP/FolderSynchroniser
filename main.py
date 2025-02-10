@@ -21,7 +21,7 @@ class App():
         menu.add_command(label='Clear Selection', command=self.clear_selection)
         menu.add_command(label='Synchronise Files', command=self.sync_files)
 
-        self.main_frame = tk.Frame(self.root, highlightbackground="black", highlightthickness=1)
+        self.main_frame = tk.Frame(self.root, highlightbackground="black", highlightthickness=1, background='white')
         self.main_frame.pack(expand=True, fill="both", padx=5, pady=5)
 
         tk.Button(self.main_frame, text="Select Directory", anchor="center", justify="center", command=self.select_file).place(relx=0.5, rely=0.5, anchor="center")
