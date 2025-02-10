@@ -66,7 +66,6 @@ class App():
 
 
     def clear_selection(self):
-        print("a")
         self.opened_dirs = None
         for widget in self.main_frame.winfo_children():
             widget.destroy()
