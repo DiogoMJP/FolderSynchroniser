@@ -13,7 +13,6 @@ class Directory:
 
     def traverse_dirs(self, path, path_origin):
         for d in os.listdir(path):
-            print(d)
             full_path = os.path.join(path, d)
             isdir = os.path.isdir(full_path)
 
