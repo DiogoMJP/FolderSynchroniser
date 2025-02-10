@@ -59,6 +59,9 @@ class App():
     
 
     def refresh_files(self):
+        if self.opened_dirs == None:
+            return
+        
         for widget in self.main_frame.winfo_children():
             widget.destroy()
         
@@ -91,6 +94,8 @@ class App():
     def sync_files(self):
         if self.opened_dirs != None:
             self.opened_dirs.update_files({path : os.path.normpath(path) for path in self.path_origins})
+        else:
+            return
 
         for widget in self.main_frame.winfo_children():
             widget.destroy()
