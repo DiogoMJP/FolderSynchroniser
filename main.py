@@ -3,6 +3,7 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
+import tkinter.font as tkFont
 
 import Directory
 
@@ -27,19 +28,10 @@ class App():
 
         tk.Button(self.main_frame, text="Select Directory", anchor="center", justify="center", command=self.select_file).place(relx=0.5, rely=0.5, anchor="center")
 
-        self.opened_dirs = Directory.Directory()
+        self.opened_dirs = None
 
         self.root.mainloop()
     
-
-    # def traverse_dir(self, tv, parent,path):
-    #     for d in os.listdir(path):
-    #         full_path=os.path.join(path,d)
-    #         isdir = os.path.isdir(full_path)
-    #         id=tv.insert(parent,'end',text=d + "\t-\t" + str(datetime.fromtimestamp(os.path.getmtime(full_path))),open=False)
-    #         if isdir:
-    #             self.traverse_dir(tv, id,full_path)
-
 
     def select_file(self):
         selected_file = filedialog.Directory().show()
@@ -48,24 +40,29 @@ class App():
             for widget in self.main_frame.winfo_children():
                 widget.destroy()
         
-        self.opened_dirs.traverse_dirs(selected_file)
-            
-        # selected_file = filedialog.Directory().show()
-        
-        # if selected_file != "":
-        #     for widget in self.main_frame.winfo_children():
-        #         widget.destroy()
-        
-        #     tv = ttk.Treeview(self.main_frame, show="tree")
-        #     ybar=tk.Scrollbar(self.main_frame, orient=tk.VERTICAL, command=tv.yview)
-        #     tv.configure(yscroll=ybar.set)
-        #     tv.heading('#0',text='Dir：'+selected_file,anchor='w')
-        #     node=tv.insert('','end',text=selected_file,open=True)
+        if self.opened_dirs == None:
+            self.opened_dirs = Directory.Directory(None)
+        self.opened_dirs.traverse_dirs(selected_file, selected_file)
 
-        #     self.traverse_dir(tv, node, selected_file)
+        self.tree = ttk.Treeview(columns=["Last Modified", "Last Modification Origin"])
+        vsb = ttk.Scrollbar(orient="vertical",
+            command=self.tree.yview)
+        hsb = ttk.Scrollbar(orient="horizontal",
+            command=self.tree.xview)
+        self.tree.configure(yscrollcommand=vsb.set,
+            xscrollcommand=hsb.set)
+        self.tree.grid(column=0, row=0, sticky='nsew', in_=self.main_frame)
+        vsb.grid(column=1, row=0, sticky='ns', in_=self.main_frame)
+        hsb.grid(column=0, row=1, sticky='ew', in_=self.main_frame)
+        self.main_frame.grid_columnconfigure(0, weight=1)
+        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.tree.tag_configure('copy', background='light green')
 
-        #     ybar.pack(side=tk.RIGHT,fill=tk.Y)
-        #     tv.pack(expand=True, fill="both")
+        for col in ["Last Modified", "Last Modification Origin"]:
+            self.tree.heading(col, text=col.title())
+            self.tree.column(col, width=tkFont.Font().measure(col.title()))
+        
+        self.opened_dirs.display(self.tree, '')
 
 
 if __name__ == "__main__":
