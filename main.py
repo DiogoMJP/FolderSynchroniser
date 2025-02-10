@@ -22,14 +22,10 @@ class App():
         filemenu.add_separator()
         filemenu.add_command(label='Exit', command=self.root.quit)
 
-        self.root.grid_columnconfigure(0, weight = 1)
-        self.root.grid_columnconfigure(1, weight = 1)
-        self.root.grid_rowconfigure(0, weight = 1)
-
         self.main_frame = tk.Frame(self.root, highlightbackground="black", highlightthickness=1)
-        self.main_frame.grid(row = 0, column = 0, padx=5, pady=5, sticky = "nesw")
+        self.main_frame.pack(expand=True, fill="both", padx=5, pady=5)
 
-        tk.Button(self.main_frame, text="Select Directory", anchor="center", justify="center", command=self.select_file).pack(expand=True, fill="both")
+        tk.Button(self.main_frame, text="Select Directory", anchor="center", justify="center", command=self.select_file).place(relx=0.5, rely=0.5, anchor="center")
 
         self.opened_dirs = Directory.Directory()
 
