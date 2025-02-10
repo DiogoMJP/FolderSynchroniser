@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
@@ -21,6 +22,7 @@ class App():
         filemenu.add_command(label='Clear Selection', command=self.clear_selection)
         filemenu.add_separator()
         filemenu.add_command(label='Exit', command=self.root.quit)
+        menu.add_command(label='Update Files', command=self.update_files)
 
         self.main_frame = tk.Frame(self.root, highlightbackground="black", highlightthickness=1)
         self.main_frame.pack(expand=True, fill="both", padx=5, pady=5)
@@ -28,6 +30,7 @@ class App():
         tk.Button(self.main_frame, text="Select Directory", anchor="center", justify="center", command=self.select_file).place(relx=0.5, rely=0.5, anchor="center")
 
         self.opened_dirs = None
+        self.path_origins = []
 
         self.root.mainloop()
     
@@ -40,6 +43,9 @@ class App():
                 for widget in self.main_frame.winfo_children():
                     widget.destroy()
                 self.opened_dirs = Directory.Directory(None)
+            
+            self.path_origins += [selected_file]
+            
             self.opened_dirs.traverse_dirs(selected_file, selected_file)
 
             self.tree = ttk.Treeview(self.main_frame, columns=["Last Modified", "Last Modification Origin"])
@@ -65,10 +71,17 @@ class App():
 
     def clear_selection(self):
         self.opened_dirs = None
+        self.origin_paths = []
+
         for widget in self.main_frame.winfo_children():
             widget.destroy()
         
         tk.Button(self.main_frame, text="Select Directory", anchor="center", justify="center", command=self.select_file).place(relx=0.5, rely=0.5, anchor="center")
+    
+
+    def update_files(self):
+        if self.opened_dirs != None:
+            self.opened_dirs.update_files({path : os.path.normpath(path) for path in self.path_origins})
 
 
 

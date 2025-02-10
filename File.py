@@ -13,22 +13,27 @@ class File():
     def update_path(self, path, path_origin):
         time = os.path.getmtime(path)
         if self.origin == None:
-            self.origin = (path, time, path_origin)
+            self.origin = (time, path_origin)
         else:
-            if time > self.origin[1]:
+            if time > self.origin[0]:
                 origin = self.origin
                 self.dest_list += [origin]
-                self.origin = (path, time, path_origin)
+                self.origin = (time, path_origin)
                 self.copy = True
             else:
-                self.dest_list += [(path, time, path_origin)]
-                if time < self.origin[1]:
+                self.dest_list += [(time, path_origin)]
+                if time < self.origin[0]:
                     self.copy = True
 
 
     def display(self, tree, parent):
-        item = (datetime.fromtimestamp(self.origin[1]), self.origin[2])
+        item = (datetime.fromtimestamp(self.origin[0]), self.origin[1])
         if self.copy:
             tree.insert(parent, 'end', text=self.file_name, values=item, tags=("copy",))
         else:
             tree.insert(parent, 'end', text=self.file_name, values=item)
+    
+
+    def update_files(self, path_origins):
+        path_origins = {path[0] : os.path.normpath(os.path.join(path[0], self.file_name)) for path in path_origins.items()}
+        print(path_origins, self.origin)

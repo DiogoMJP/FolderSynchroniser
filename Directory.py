@@ -41,3 +41,13 @@ class Directory:
             file.display(tree, id)
         for dir in self.subdirs.values():
             dir.display(tree, id)
+
+
+    def update_files(self, path_origins):
+        if self.dir_name != None:
+            path_origins = {path[0] : os.path.normpath(os.path.join(path[0], self.dir_name)) for path in path_origins.items()}
+        print(path_origins)
+        for file in self.files.values():
+            file.update_files(path_origins)
+        for dir in self.subdirs.values():
+            dir.update_files(path_origins)
