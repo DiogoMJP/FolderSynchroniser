@@ -30,6 +30,19 @@ class App():
         self.path_origins = []
 
         self.root.mainloop()
+
+
+    def create_tree(self):
+        for widget in self.main_frame.winfo_children():
+            widget.destroy()
+
+        self.tree = ttk.Treeview(self.main_frame, columns=["Last Modified", "Last Modification Origin"])
+        self.tree.pack(expand=True, fill="both", padx=5, pady=5)
+        self.tree.tag_configure('copy', background='light green')
+
+        for col in ["Last Modified", "Last Modification Origin"]:
+            self.tree.heading(col, text=col.title())
+            self.tree.column(col, width=tkFont.Font().measure(col.title()))
     
 
     def select_file(self):
@@ -38,22 +51,13 @@ class App():
         if selected_file != "":
             if self.opened_dirs == None:
                 self.opened_dirs = Directory.Directory(None)
-                
-            for widget in self.main_frame.winfo_children():
-                widget.destroy()
             
             self.path_origins += [selected_file]
             
             self.opened_dirs.traverse_dirs(selected_file, selected_file)
             self.opened_dirs.check_for_number_of_files(len(self.path_origins))
 
-            self.tree = ttk.Treeview(self.main_frame, columns=["Last Modified", "Last Modification Origin"])
-            self.tree.pack(expand=True, fill="both", padx=5, pady=5)
-            self.tree.tag_configure('copy', background='light green')
-
-            for col in ["Last Modified", "Last Modification Origin"]:
-                self.tree.heading(col, text=col.title())
-                self.tree.column(col, width=tkFont.Font().measure(col.title()))
+            self.create_tree()
             
             self.opened_dirs.display(self.tree, '')
     
@@ -62,16 +66,7 @@ class App():
         if self.opened_dirs == None:
             return
         
-        for widget in self.main_frame.winfo_children():
-            widget.destroy()
-        
-        self.tree = ttk.Treeview(self.main_frame, columns=["Last Modified", "Last Modification Origin"])
-        self.tree.pack(expand=True, fill="both", padx=5, pady=5)
-        self.tree.tag_configure('copy', background='light green')
-
-        for col in ["Last Modified", "Last Modification Origin"]:
-            self.tree.heading(col, text=col.title())
-            self.tree.column(col, width=tkFont.Font().measure(col.title()))
+        self.create_tree()
         
         self.opened_dirs = Directory.Directory(None)
         for path in self.path_origins:
@@ -92,21 +87,12 @@ class App():
     
 
     def sync_files(self):
-        if self.opened_dirs != None:
-            self.opened_dirs.update_files({path : os.path.normpath(path) for path in self.path_origins})
-        else:
+        if self.opened_dirs == None:
             return
-
-        for widget in self.main_frame.winfo_children():
-            widget.destroy()
         
-        self.tree = ttk.Treeview(self.main_frame, columns=["Last Modified", "Last Modification Origin"])
-        self.tree.pack(expand=True, fill="both", padx=5, pady=5)
-        self.tree.tag_configure('copy', background='light green')
-
-        for col in ["Last Modified", "Last Modification Origin"]:
-            self.tree.heading(col, text=col.title())
-            self.tree.column(col, width=tkFont.Font().measure(col.title()))
+        self.opened_dirs.update_files({path : os.path.normpath(path) for path in self.path_origins})
+        
+        self.create_tree()
         
         self.opened_dirs = Directory.Directory(None)
         for path in self.path_origins:
