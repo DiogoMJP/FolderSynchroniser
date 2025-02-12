@@ -30,7 +30,7 @@ class App(object):
         self.main_frame.pack(expand=True, fill="both", padx=5, pady=5)
 
         # Creates a secondary button to open a directory
-        tk.Button(self.main_frame, text="Select Directory", anchor="center", justify="center", command=self.select_file).place(relx=0.5, rely=0.5, anchor="center")
+        tk.Button(self.main_frame, text="Open Directory", anchor="center", justify="center", command=self.select_file).place(relx=0.5, rely=0.5, anchor="center")
 
         self.opened_dirs = None
         # Stores all starting paths for the opened directories
